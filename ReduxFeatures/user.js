@@ -68,12 +68,6 @@ const userReducer = createSlice({
     name : 'user',
     initialState,
     reducers : {
-        win : (state, { payload }) => {
-            state.cash += payload
-        },
-        lose : (state, { payload }) => {
-            state.cash -= payload
-        },
         reset : (state) => {
             state.serverError = false
             state.inputError = false
@@ -182,6 +176,6 @@ const userReducer = createSlice({
     }
 })
 
-export const { win, lose, reset, logout, login, resetServerError } = userReducer.actions
+export const { reset, logout, login, resetServerError } = userReducer.actions
 
 export default userReducer.reducer

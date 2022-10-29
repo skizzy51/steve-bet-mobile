@@ -1,21 +1,33 @@
 import { useEffect, useState } from 'react'
-import { Alert, BackHandler, Button, ImageBackground, Modal, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Alert, BackHandler, ImageBackground, Modal, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { credit, debit, lose, resetServerError, win } from '../ReduxFeatures/user'
+import { credit, debit, resetServerError } from '../ReduxFeatures/user'
 import { AntDesign } from '@expo/vector-icons';
 
 export default function MatchSimPage({ navigation, route }) {
     const dispatch = useDispatch()
     const { cash, serverError, token } = useSelector(state => state.user)
     const { stake, totalEarnings, matchupArray, betSelections } = route.params
+    const [countdown, setCountdown] = useState(5)
+    const [matchStart, setMatchStart] = useState(false)
     const [results, setResults] = useState([])
     const [modalOpen, setModalOpen] = useState(false)
 
     useEffect(()=>{
-        winLose()
         const backHandler = BackHandler.addEventListener( "hardwareBackPress", () => true )
         return () => backHandler.remove()
     }, [])
+
+    useEffect(()=>{
+        setTimeout(() => {
+            if (countdown > 1) setCountdown(countdown - 1)
+            else if (countdown <= 1) setCountdown('GO!')
+            else if (countdown === 'GO!') setMatchStart(true)
+        }, 1000);
+        if (matchStart) {
+            winLose()
+        }
+    }, [countdown, matchStart])
 
     useEffect(() => {
         if (serverError) {
@@ -144,27 +156,34 @@ export default function MatchSimPage({ navigation, route }) {
         <>
             <StatusBar barStyle='light-content' />
             <ImageBackground style={{flex:1,paddingTop:50}} source={require('../images/match-page-bgn.jpg')} >
-                <ScrollView style={{paddingLeft : 20, paddingRight : 20}}>
-                    <Text
-                    numberOfLines={1}
-                    style={{color:'white',fontSize:22, fontStyle:'italic', fontWeight:'600', textAlign:"right"}}>
-                        Cash: ₦ {Platform.OS === 'android' ? cash.toFixed(2) : cash.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits : 2})}
-                    </Text>
-
-                    <View style={styles.resultList}>
-                        {renderMatchups}
+                {
+                    !matchStart
+                    ? <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+                        <Text style={{fontSize:35, color:'white'}}>Matches will begin in ...</Text>
+                        <Text style={{fontSize:150, color:'white'}}>{countdown}</Text>
                     </View>
+                    : <ScrollView style={{paddingLeft : 20, paddingRight : 20}}>
+                        <Text
+                        numberOfLines={1}
+                        style={{color:'white',fontSize:22, fontStyle:'italic', fontWeight:'600', textAlign:"right"}}>
+                            Cash: ₦ {Platform.OS === 'android' ? cash.toFixed(2) : cash.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits : 2})}
+                        </Text>
 
-                    <View style={styles.resultList}>
-                        {renderSelections}
-                    </View>
+                        <View style={styles.resultList}>
+                            {renderMatchups}
+                        </View>
 
-                    <View style={{marginTop:20, marginBottom:20}}>
-                        <Pressable onPress={()=>setModalOpen(true)} style={({pressed}) => pressed ? styles.viewResultPressed : styles.viewResult}>
-                            <Text style={{fontSize:18, color:'white', fontWeight:'600'}}>View Results</Text>
-                        </Pressable>
-                    </View>
-                </ScrollView>
+                        <View style={styles.resultList}>
+                            {renderSelections}
+                        </View>
+
+                        <View style={{marginTop:20, marginBottom:20}}>
+                            <Pressable onPress={()=>setModalOpen(true)} style={({pressed}) => pressed ? styles.viewResultPressed : styles.viewResult}>
+                                <Text style={{fontSize:18, color:'white', fontWeight:'600'}}>View Results</Text>
+                            </Pressable>
+                        </View>
+                    </ScrollView>
+                }
             </ImageBackground>
             <Modal visible={modalOpen} animationType='slide' presentationStyle='pageSheet' >
                 <View style={{flex:.3, flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start', paddingLeft:20, paddingRight:20, paddingTop : 30}}>

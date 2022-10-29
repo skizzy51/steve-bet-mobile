@@ -1,9 +1,20 @@
-import { Modal, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Modal, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 export default function StakeModal(props) {
     const navigation = useNavigation()
+    const { cash } = useSelector(state => state.user)
+
+    function placeBet () {
+        if ( Number(props.values.data.stake) <= cash ) {
+            navigation.navigate(props.values.redirectScreen, props.values.data)
+            props.values.setModalOpen(false)
+        }else{
+            Alert.alert('You do not have enough cash to place this bet')
+        }
+    }
 
     return (
         <Modal visible={props.values.modalOpen} animationType='slide' presentationStyle='pageSheet' >
@@ -35,7 +46,7 @@ export default function StakeModal(props) {
 
             <View style={{flex:.15, paddingLeft:20, paddingRight:20}}>
                 <Pressable
-                    onPress={() =>{ navigation.navigate(props.values.redirectScreen, props.values.data); props.values.setModalOpen(false) }}
+                    onPress={placeBet}
                     style={({pressed})=> pressed ? styles.placeBetBtnPressed : styles.placeBetBtn}
                 >
                     <Text style={{color:'white', fontWeight:'600', fontSize:20}}>Place bet</Text>

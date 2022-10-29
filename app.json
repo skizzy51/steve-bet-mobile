@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "steve-bet-mobile",
+    "name": "Steve Bet",
     "slug": "steve-bet-mobile",
+    "description" : "Welcome to the home of leading Virtual betting. We offer online betting on either horse racing or Football. Take advantage of the convenience of betting at any time and anywhere.",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",

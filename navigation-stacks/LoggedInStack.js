@@ -8,7 +8,6 @@ import OverallPlacement from '../screens/Overall placement'
 import SingleRacePage from '../screens/Single-race-page'
 import SinglePlacement from '../screens/Single placement'
 import OverallRacePage from '../screens/Overall-race-page'
-import PaystackPage from '../screens/Paystack-page'
 
 const Stack = createNativeStackNavigator()
 
@@ -17,7 +16,6 @@ export default function LoggedInStack() {
         <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}}>
             <Stack.Screen name='Home' component={Home} options={{gestureEnabled : false, gestureEnabled : false}} />
             <Stack.Screen name='Deposit' component={Deposit} options={{animation:'none', gestureEnabled : false}} />
-            <Stack.Screen name='Paystack-page' component={PaystackPage} options={{animation:'none', gestureEnabled : false}} />
             <Stack.Screen name='Football' component={Football} options={{animation:'none', gestureEnabled : false}} />
             <Stack.Screen name='Horse-racing' component={HorseRacing} options={{animation:'none'}} />
             <Stack.Screen name='Single-placement' component={SinglePlacement} options={{animation:'none', gestureEnabled : false}} />

@@ -11,7 +11,7 @@ export default function Onboarding1({ navigation }) {
                 <Text style={styles.welcomeText}>Welcome to...</Text>
                 <Image style={{bottom:45}} source={require('../images/logo.png')} />
                 <Text style={styles.introText}>Welcome to the home of leading Virtual betting. We offer online betting on either horse racing or Football. Take advantage
-                    of the convenience of betting at any time and anywhere. Our website is optimized for portable devices, such as smartphones and tablets.
+                    of the convenience of betting at any time and anywhere.
                 </Text>
                 <View style={{flex:.5}}>
                     <Pressable onPress={() => navigation.navigate('Onboarding2')} style={({pressed})=> pressed ? styles.loginPressed : styles.login }>

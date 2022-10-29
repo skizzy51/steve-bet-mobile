@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Alert, Modal, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import BottomNav from '../components/BottomNav'
 import TopNav from '../components/TopNav'
 import { RandomNumber } from '../functions/RandomNumber'
-import { AntDesign } from '@expo/vector-icons';
 import StakeModal from '../components/StakeModal'
 
 

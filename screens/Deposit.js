@@ -1,13 +1,17 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Alert, Pressable, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { Paystack, paystackProps } from 'react-native-paystack-webview'
+import { useDispatch, useSelector } from 'react-redux'
 import BottomNav from '../components/BottomNav'
 import TopNav from '../components/TopNav'
-import { logout } from '../ReduxFeatures/user'
+import { credit, logout } from '../ReduxFeatures/user'
 
 export default function Deposit({ navigation }) {
     const [depositCash, setDepositCash] = useState(1000)
     const dispatch = useDispatch()
+    const { token, serverError } = useSelector(state => state.user)
+    const [error, setError] = useState(serverError)
+    const paystackWebViewRef = useRef(paystackProps.PayStackRef) 
 
     function handleLogout () {
         dispatch(logout())
@@ -17,7 +21,7 @@ export default function Deposit({ navigation }) {
         if (depositCash < 100) {
             return Alert.alert('You can only deposit a minimum of ₦100')
         }else {
-            navigation.navigate('Paystack-page', {amount : depositCash})
+            paystackWebViewRef.current.startTransaction()
         }
     }
 
@@ -49,6 +53,25 @@ export default function Deposit({ navigation }) {
                 </View>
 
                 <BottomNav navigation={navigation} />
+                <Paystack 
+                    paystackKey="pk_test_3c3583c8828234ac6d37ac46ac17bcbca3f672bd"
+                    amount={depositCash}
+                    billingEmail="obisteve81@gmail.com"
+                    activityIndicatorColor="green"
+                    onCancel={(e) => {
+                        Alert.alert('Transaction failed')
+                    }}
+                    onSuccess={(res) => {
+                        let data = {amount : depositCash, token : token}
+                        dispatch(credit(data))
+                        if (error) {
+                            Alert.alert('Transaction failed')
+                        }else{
+                            Alert.alert('Transaction success')
+                        }
+                    }}
+                    ref={paystackWebViewRef}
+                />
             </View>
         </>
     )
